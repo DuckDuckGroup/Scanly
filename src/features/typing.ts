@@ -20,10 +20,14 @@ export default function STyping(controller: Botkit) {
   typing.addMessage('typed!', 'next_thread');
 
   // use the before handler to delay the next message
-  typing.before('next_thread', async () => new Promise((resolve) => {
-    // simulate some long running process
-    setTimeout(resolve, 3000);
-  }));
+  typing.before(
+    'next_thread',
+    async () =>
+      new Promise((resolve) => {
+        // simulate some long running process
+        setTimeout(resolve, 3000);
+      }),
+  );
 
   controller.addDialog(typing);
 
