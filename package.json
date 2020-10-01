@@ -1,0 +1,59 @@
+{
+  "name": "scanly",
+  "version": "1.0.0",
+  "description": "DuckDuckGroup's Chatbot-fronted Security Suite",
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "ts-node src/main.ts",
+    "start:jsdev": "pnpm run build:dev && node dist/main.js",
+    "clean": "rimraf dist/",
+    "copy": "copyfiles -u 1 \"src/public/**/*\" dist && copyfiles -u 1 \"src/sass/**/*\" dist",
+    "prebuild:dev": "pnpm run lint:fix && pnpm run clean",
+    "prebuild:prod": "pnpm run lint:fix && pnpm run clean",
+    "build:dev": "tsc -p tsconfig.json",
+    "build:prod": "tsc -p tsconfig.production.json",
+    "postbuild:dev": "pnpm run copy",
+    "postbuild:prod": "pnpm run copy",
+    "preinstall": "npx only-allow pnpm",
+    "lint": "eslint ./src/**/*.{js,ts}",
+    "lint:fix": "eslint --fix ./src/**/*.{js,ts}",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DuckDuckGroup/Scanly.git"
+  },
+  "author": "",
+  "license": "LGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/DuckDuckGroup/Scanly/issues"
+  },
+  "homepage": "https://github.com/DuckDuckGroup/Scanly#readme",
+  "dependencies": {
+    "botbuilder-adapter-web": "^1.0.9",
+    "botbuilder-storage-mongodb": "1.0.5",
+    "botkit": "^4.10.0",
+    "botkit-plugin-cms": "^1.0.3",
+    "dotenv": "8.2.0",
+    "mongodb": "^3.6.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.3.0",
+    "@typescript-eslint/parser": "^4.3.0",
+    "copyfiles": "^2.3.0",
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "ava": {
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  }
+}
