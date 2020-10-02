@@ -3,10 +3,11 @@
  * Licensed under the MIT License.
  */
 import { Botkit } from 'botkit';
+import log from '../logger';
 
 export default function SWebSockets(controller: Botkit) {
   if (controller.adapter.name === 'Web Adapter') {
-    console.log('Loading sample web features...');
+    log('info', 'Loading sample web features...');
 
     controller.hears(new RegExp('quick'), 'message', async (bot, message) => {
       await bot.reply(message, {

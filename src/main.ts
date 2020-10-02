@@ -14,7 +14,7 @@ const storage = process.env.MONGO_URI
         'BotState',
       ),
     )
-  : undefined; // eslint-disable-line no-eval
+  : undefined;
 
 const adapter = new WebAdapter({});
 
@@ -34,7 +34,7 @@ if (process.env.CMS_URI) {
 }
 
 controller.ready(() => {
-  controller.loadModules(`${__dirname}/features`, ['.ts']);
+  controller.loadModules(`${__dirname}/features`, ['.ts', '.js']);
 
   if (controller.plugins.cms) {
     controller.on('message,direct_message', async (bot, message) =>

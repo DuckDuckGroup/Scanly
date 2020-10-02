@@ -4,11 +4,12 @@
  */
 import { Botkit } from 'botkit';
 import path from 'path';
+import log from '../logger';
 
 export default function chats(controller: Botkit) {
   // make public/index.html available as localhost/index.html
   // by making the /public folder a static/public asset
   controller.publicFolder('/', path.join(__dirname, '..', 'public'));
 
-  console.log(`Chat with me: http://localhost:${process.env.PORT || 3000}`); // TODO/IMPORTANT: Add logging lib
+  log('info', `Chat with me: http://localhost:${process.env.PORT || 3000}`);
 }
