@@ -110,7 +110,7 @@ a.button:hover {
 
 /* chat client */
 #message_window {
-  background: #FFFFFF;
+  background: #252525;
   border-left: 1px solid #CCC;
   border-right: 1px solid #CCC;
   /*height: 500px;
@@ -330,5 +330,3 @@ a.button:hover {
 #welcome {
   margin-left: 440px;
 }
-
-/*# sourceMappingURL=styles.css.map */
