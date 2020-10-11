@@ -10,29 +10,27 @@
     <div class="disconnected">Disconnected... reconnecting!</div>
     <div class="offline">Offline! Reload to reconnect.</div>
     <div class="powered_by">Scanly | Simplifying Security</div>
-    <section>
-      <div id="message_list">
-        <div id="message_template">
-          <div class="message {{message.type}}">
-            {{#if message.isTyping}}
-              <div class="typing-indicator"><span></span><span></span><span></span></div>
-            {{/if}}
-              {{{message.html}}}
+    <section id="message_list">
+      <div id="message_template">
+        <div class="message {{message.type}}">
+          {{#if message.isTyping}}
+            <div class="typing-indicator"><span></span><span></span><span></span></div>
+          {{/if}}
+            {{{message.html}}}
 
-            {{#if message.open_link}}
-              <a href="{{{message.open_link}}}" target="_blank" class="button_message">{{#if message.link_title}}{{message.link_title}}{{else}}{{message.open_link}}{{/if}}</a>
+          {{#if message.open_link}}
+            <a href="{{{message.open_link}}}" target="_blank" class="button_message">{{#if message.link_title}}{{message.link_title}}{{else}}{{message.open_link}}{{/if}}</a>
+          {{/if}}
+        </div>
+        {{#message.files}}
+          <div class="file_attachment">
+            {{#if image}}
+              <img src="{{{url}}}" alt="{{{url}}}" />
+            {{else}}
+              <a href="{{{url}}}" title="{{{url}}}">{{{url}}}</a>
             {{/if}}
           </div>
-          {{#message.files}}
-            <div class="file_attachment">
-              {{#if image}}
-                <img src="{{{url}}}" alt="{{{url}}}" />
-              {{else}}
-                <a href="{{{url}}}" title="{{{url}}}">{{{url}}}</a>
-              {{/if}}
-            </div>
-          {{/message.files}}
-        </div>
+        {{/message.files}}
       </div>
     </section>
     <div id="message_replies"></div>
