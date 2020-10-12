@@ -9,7 +9,7 @@ html {
   padding: 0;
   font-size: 18px;
   background-color: #252525;
-  font: "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .box {
@@ -116,7 +116,6 @@ a.button:hover {
   width: 100%;
   display: flex;
   flex-direction: column;
-  font-family: "helvetica", sans-serif;
 }
 #message_window .disconnected {
   background: #FFFFCC;
@@ -200,7 +199,7 @@ a.button:hover {
   display: none;
 }
 #message_window .message {
-  font-size: 14px;
+  font-size: 1em;
   padding: 0.5rem;
   background: #F0F0F0;
   color: #333;
@@ -242,7 +241,8 @@ a.button:hover {
 }
 #message_window .message.outgoing {
   float: right;
-  background: #a795ef;
+  background: linear-gradient(#93bd20, #659e10);
+  background-color: #93bd20;
   color: white;
 }
 #message_window #message_replies {
