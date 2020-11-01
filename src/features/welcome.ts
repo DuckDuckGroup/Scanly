@@ -49,7 +49,9 @@ export default function welcome(controller: Botkit) {
     controller.hears(['hi','hello','hey','howdy','start','restart'],'message', async (bot, message) => {
         await bot.beginDialog('welcomeMessage',message);
     });
-    controller.hears('menu','message', async (bot, message) => {
-        await bot.beginDialog('mainMenu');
+
+    //Can write menu at anytime to view it
+    controller.hears(['menu','options'],'message', async (bot, message) => {
+        await bot.beginDialog('mainMenu', message);
     })
 }
