@@ -8,14 +8,14 @@ export default function welcome(controller: Botkit) {
   );
   WelcomeMessage.ask(
     'For auditing purposes, what is your full name?',
-    async (response, WelcomeMessage, bot) => {
+    async (response, _WelcomeMessage, bot) => {
       await bot.say(`Thanks ${response}`);
     },
     { key: 'name' },
   );
   WelcomeMessage.ask(
     'And your email address?',
-    async (response, WelcomeMessage, bot) => {
+    async (response, _WelcomeMessage, bot) => {
       await bot.say(`Ok, saving ${response}`);
     },
     { key: 'email' },
@@ -32,7 +32,7 @@ export default function welcome(controller: Botkit) {
       {
         pattern: '1',
         type: 'string',
-        handler: async (ResponseText, MainMenu, bot) => {
+        handler: async (_ResponseText, _MainMenu, bot) => {
           // Change to new conversation (waiting to be built)
           // return await mainMenu.gotoThread('yes_taco');
           await bot.say('Go to Account Breach');
@@ -41,7 +41,7 @@ export default function welcome(controller: Botkit) {
       {
         pattern: '2',
         type: 'string',
-        handler: async (ResponseText, MainMenu, bot) => {
+        handler: async (_ResponseText, _MainMenu, bot) => {
           // return await mainMenu.gotoThread('no_taco');
           await bot.say('Go to Network Enumeration');
         },
@@ -49,7 +49,7 @@ export default function welcome(controller: Botkit) {
       {
         pattern: '3',
         type: 'string',
-        handler: async (ResponseText, MainMenu, bot) => {
+        handler: async (_ResponseText, _MainMenu, bot) => {
           // return await mainMenu.gotoThread('no_taco');
           await bot.say('Go to Network Vulnerability Scan');
         },
@@ -57,14 +57,14 @@ export default function welcome(controller: Botkit) {
       {
         pattern: '4',
         type: 'string',
-        handler: async (ResponseText, MainMenu, bot) => {
+        handler: async (_ResponseText, _MainMenu, bot) => {
           // return await mainMenu.gotoThread('no_taco');
           await bot.say('View Archived Reports');
         },
       },
       {
         default: true,
-        handler: async (MainMenu, FailedValidation, bot) => {
+        handler: async (_MainMenu, FailedValidation, bot) => {
           await bot.say('Please enter a number between 1 and 4');
           return FailedValidation.repeat();
         },
