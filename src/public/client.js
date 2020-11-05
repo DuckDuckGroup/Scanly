@@ -98,29 +98,35 @@ var Botkit = {
   getHistory(guid) {
     const that = this;
     if (that.guid) {
-      that.request('/botkit/history', {
-        user: that.guid,
-      }).then((history) => {
-        if (history.success) {
-          that.trigger('history_loaded', history.history);
-        } else {
-          that.trigger('history_error', new Error(history.error));
-        }
-      }).catch((err) => {
-        that.trigger('history_error', err);
-      });
+      that
+        .request('/botkit/history', {
+          user: that.guid,
+        })
+        .then((history) => {
+          if (history.success) {
+            that.trigger('history_loaded', history.history);
+          } else {
+            that.trigger('history_error', new Error(history.error));
+          }
+        })
+        .catch((err) => {
+          that.trigger('history_error', err);
+        });
     }
   },
   webhook(message) {
     const that = this;
 
-    that.request('/api/messages', message).then((messages) => {
-      messages.forEach((message) => {
-        that.trigger(message.type, message);
+    that
+      .request('/api/messages', message)
+      .then((messages) => {
+        messages.forEach((message) => {
+          that.trigger(message.type, message);
+        });
+      })
+      .catch((err) => {
+        that.trigger('webhook_error', err);
       });
-    }).catch((err) => {
-      that.trigger('webhook_error', err);
-    });
   },
   connect(user) {
     const that = this;
@@ -246,7 +252,7 @@ var Botkit = {
       message,
     });
     if (!message.isTyping) {
-      delete (that.next_line);
+      delete that.next_line;
     }
   },
   triggerScript(script, thread) {
@@ -300,7 +306,7 @@ var Botkit = {
   },
   setCookie(cname, cvalue, exdays) {
     const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
     const expires = `expires=${d.toUTCString()}`;
     document.cookie = `${cname}=${cvalue};${expires};path=/`;
   },
@@ -325,8 +331,7 @@ var Botkit = {
         .toString(16)
         .substring(1);
     }
-    return `${s4() + s4()}-${s4()}-${s4()}-${
-      s4()}-${s4()}${s4()}${s4()}`;
+    return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
   },
   boot(user) {
     console.log('Booting up');
@@ -406,7 +411,7 @@ var Botkit = {
             li.appendChild(el);
             list.appendChild(li);
             elements.push(li);
-          }(message.quick_replies[r]));
+          })(message.quick_replies[r]);
         }
 
         that.replies.appendChild(list);
@@ -465,4 +470,4 @@ var Botkit = {
   // your page initialization code here
   // the DOM will be available here
   Botkit.boot();
-}());
+})();
