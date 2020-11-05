@@ -14,7 +14,8 @@ export default function VulnScanner(controller: Botkit) {
         handler: async (_ResponseText, _MainMenu, bot) => {
           // Change to new conversation (waiting to be built)
           // return await mainMenu.gotoThread('yes_taco');
-          await bot.say('Go to Account Breach');
+          await bot.say('You selected Quick Scan')
+          await bot.beginDialog('VulnIPSelect');
         },
       },
       {
@@ -22,7 +23,8 @@ export default function VulnScanner(controller: Botkit) {
         type: 'string',
         handler: async (_ResponseText, _MainMenu, bot) => {
           // return await mainMenu.gotoThread('no_taco');
-          await bot.say('Go to Network Enumeration');
+          await bot.say('You selected Normal Scan')
+          await bot.beginDialog('VulnIPSelect');
         },
       },
       {
@@ -30,7 +32,8 @@ export default function VulnScanner(controller: Botkit) {
         type: 'string',
         handler: async (_ResponseText, _MainMenu, bot) => {
           // return await mainMenu.gotoThread('no_taco');
-          await bot.say('Go to Network Vulnerability Scan');
+          await bot.say('You selected In-depth Scan')
+          await bot.beginDialog('VulnIPSelect');
         },
       },
       {
@@ -38,7 +41,8 @@ export default function VulnScanner(controller: Botkit) {
         type: 'string',
         handler: async (_ResponseText, _MainMenu, bot) => {
           // return await mainMenu.gotoThread('no_taco');
-          await bot.say('Custom Scan Options');
+          await bot.say('You selected In-depth Scan')
+          await bot.beginDialog('VulnCustom');
           // need to fix!!!!!!!!!!!!!
         },
       },
@@ -52,10 +56,17 @@ export default function VulnScanner(controller: Botkit) {
     ],
     { key: 'menuOption' },
   );
-   VulnScanConvo.addGotoDialog('VulnIPSelect')
+   
    VulnScanConvo.addAction('complete')
 
-
+   const VulnCustom= new BotkitConversation('VulnCustom', controller);
+   VulnCustom.ask('Enter custom flags',
+   async (response, _VulnCustom, bot) => {
+     await bot.beginDialog('VulnIPSelect');
+   },
+   { key: 'Customflags' },
+ );
+  controller.addDialog(VulnCustom)
 
   controller.addDialog(VulnScanConvo)
   const VulnIPSelect = new BotkitConversation('VulnIPSelect', controller);
