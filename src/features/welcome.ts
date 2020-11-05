@@ -51,7 +51,7 @@ export default function welcome(controller: Botkit) {
         type: 'string',
         handler: async (_ResponseText, _MainMenu, bot) => {
           // return await mainMenu.gotoThread('no_taco');
-          await bot.say('Go to Network Vulnerability Scan');
+          await bot.beginDialog('VulnScanConvo');
         },
       },
       {
