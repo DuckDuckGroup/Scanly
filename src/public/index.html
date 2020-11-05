@@ -5,11 +5,25 @@
     <script src="https://cdn.rawgit.com/showdownjs/showdown/1.7.4/dist/showdown.min.js"></script>
     <link rel="stylesheet" href="/css/styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.botframework.com/botframework-webchat/latest/botchat.js"></script>
+    <script>
+            botConnection
+            .postActivity({
+                from: user,
+                name: 'openSeasame',
+                type: 'joining',
+                value: ''
+            })
+            .subscribe(function (id) {
+                console.log('"trigger openSeasame" sent');
+            });
+    </script>
   </head>
   <body id="message_window">
+    <img width="24%" href src="images/logo-no-white.png" alt="DuckDuckGroup Logo">
     <div class="disconnected">Disconnected... reconnecting!</div>
     <div class="offline">Offline! Reload to reconnect.</div>
-    <div class="powered_by">Scanly | Simplifying Security</div>
+    <div class="powered_by"><img width="20%" href src="images/logo-no-white.png" alt="DuckDuckGroup Logo"></div>
     <section>
       <div id="message_list">
         <div id="message_template">
