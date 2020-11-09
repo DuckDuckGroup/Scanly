@@ -1,7 +1,7 @@
 import { Botkit, BotkitConversation } from 'botkit';
 
 export default function welcome(controller: Botkit) {
-    /**
+  /**
    * Main conversation greets user & displays main menu
    * @returns nothing (all conversation displayed to user)
    */
@@ -75,7 +75,7 @@ export default function welcome(controller: Botkit) {
   );
   controller.addDialog(MainMenu);
 
-  //Display greeting when 'hi' is heard
+  // Display greeting when 'hi' is heard
   controller.hears(
     ['hi', 'hello', 'hey', 'howdy', 'start', 'restart'],
     'message',
