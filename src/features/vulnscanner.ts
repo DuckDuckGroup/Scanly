@@ -1,95 +1,92 @@
 import { Botkit, BotkitConversation } from 'botkit';
 
 export default function VulnScanner(controller: Botkit) {
-  // Welcome shows greeting to the VulnScanner page
-  const VulnScanConvo = new BotkitConversation('VulnScanConvo', controller);
+  /**
+   * Controls conversation for the vulnerability scanner. Use vuln to start it!
+   * @returns nothing (all conversation displayed to user)
+   */
 
-  VulnScanConvo.say('Welcome to the Vulnerability Scanner!')
+   //Convosation to store main menu
+  const VulnScanConvo = new BotkitConversation('VulnScanConvo', controller);
   VulnScanConvo.ask(
     'Welcome to the Vulnerability Scanner!\n\n 1. Quick Scan\n 2. Normal Scan\n 3. In-depth Scan\n4. Custom Scan\n\nPlease enter a number:',
     [
       {
+        //Quick Scan
         pattern: '1',
         type: 'string',
         handler: async (_ResponseText, _MainMenu, bot) => {
-          // Change to new conversation (waiting to be built)
-          // return await mainMenu.gotoThread('yes_taco');
           await bot.say('You selected Quick Scan')
-          await bot.beginDialog('VulnIPSelect');
         },
       },
       {
+        //Normal Scan
         pattern: '2',
         type: 'string',
-        handler: async (_ResponseText, _MainMenu, bot) => {
-          // return await mainMenu.gotoThread('no_taco');
+        handler: async (_ScanType,_VulnMenu, bot) => {
           await bot.say('You selected Normal Scan')
-          await bot.beginDialog('VulnIPSelect');
         },
       },
       {
+        //In-depth scan
         pattern: '3',
         type: 'string',
-        handler: async (_ResponseText, _MainMenu, bot) => {
-          // return await mainMenu.gotoThread('no_taco');
+        handler: async (_ScanType, _VulnMenu, bot) => {
           await bot.say('You selected In-depth Scan')
-          await bot.beginDialog('VulnIPSelect');
         },
       },
       {
+        //Custom Scan
         pattern: '4',
         type: 'string',
-        handler: async (_ResponseText, _MainMenu, bot) => {
-          // return await mainMenu.gotoThread('no_taco');
+        handler: async (_ScanType, _VulnMenu, bot) => {
           await bot.say('You selected In-depth Scan')
           await bot.beginDialog('VulnCustom');
-          // need to fix!!!!!!!!!!!!!
         },
       },
       {
         default: true,
-        handler: async (_MainMenu, FailedValidation, bot) => {
+        handler: async (_VulnMenu, FailedValidation, bot) => {
           await bot.say('Please enter a number between 1 and 4');
           return FailedValidation.repeat();
         },
       },
     ],
-    { key: 'menuOption' },
+    { key: 'VulnScanType' },
   );
-   
-   VulnScanConvo.addAction('complete')
+  VulnScanConvo.addGotoDialog('VulnIPSelect')
+  VulnScanConvo.addAction('complete')
+  controller.addDialog(VulnScanConvo)
 
-   const VulnCustom= new BotkitConversation('VulnCustom', controller);
-   VulnCustom.ask('Enter custom flags',
-   async (response, _VulnCustom, bot) => {
-     await bot.beginDialog('VulnIPSelect');
-   },
-   { key: 'Customflags' },
- );
+  //Conversation to allow custom flags
+  const VulnCustom = new BotkitConversation('VulnCustom', controller);
+  VulnCustom.ask('Enter custom flags',
+  async (_VulnFlags, _VulnCustom, bot) => {
+    await bot.beginDialog('VulnIPSelect');
+  },
+    { key: 'Customflags' },
+  );
+  VulnCustom.addAction('complete')
   controller.addDialog(VulnCustom)
 
-  controller.addDialog(VulnScanConvo)
+  //Conversation to grab IP & run scan
   const VulnIPSelect = new BotkitConversation('VulnIPSelect', controller);
-  VulnIPSelect.ask('Enter IP or IP Range', async(response, _VulnIPSelect, bot)=> {
-      await bot.say(`Target to scan: ${response}`)
+  VulnIPSelect.ask('Enter IP or IP Range (for example 192.168.0.1-10)', async(Target, _VulnIPSelect, bot)=> {
+      await bot.say(`Target to scan: ${Target}`)
   },{key:'TargetIP'})
-
-  VulnIPSelect.ask('Are you sure you wish to proceed? {Y/N}', 
+  VulnIPSelect.ask('Are you sure you wish to proceed? [Y/N]', 
   [
     {
       pattern: 'Y',
       type: 'string',
-      handler: async (_ResponseText, _VulnIPSelect, bot) => {
-        // Change to new conversation (waiting to be built)
-        // return await mainMenu.gotoThread('yes_taco');
-        await bot.say('Go to Account Breach');
+      handler: async (_Proceed, _VulnIPSelect, bot) => {
+        await bot.say('Starting Scan!');
       },
     },
     {
       pattern: 'N',
       type: 'string',
-      handler: async (_VulnIPSelect, Typo, bot) => {
-        // return await mainMenu.gotoThread('no_taco');
+      handler: async (_VulnIPSelect, _Typo, bot) => {
       await bot.beginDialog('VulnIPSelect')
       },
     },
@@ -101,30 +98,27 @@ export default function VulnScanner(controller: Botkit) {
       },
     },
   ],
-  { key: 'menuOption' },
+  { key: 'TargetIP' },
 );
-VulnIPSelect.say('Scan running...')
+
 VulnIPSelect.say('Results:')
 VulnIPSelect.say('High Severity: 23')
 VulnIPSelect.say('Medium Severity: 45')
 VulnIPSelect.say('Low Severity: 87')
-
-VulnIPSelect.ask('Would you like to save a report? {Y/N}', 
+VulnIPSelect.ask('Would you like to save the report? [Y/N]', 
   [
     {
       pattern: 'Y',
       type: 'string',
-      handler: async (_ResponseText, _VulnIPSelect, bot) => {
-        // Change to new conversation (waiting to be built)
-        // return await mainMenu.gotoThread('yes_taco');
-        await bot.say('Go to Report Area');
+      handler: async (_SaveReport, _VulnIPSelect, bot) => {
+        await bot.say('Report Saved! Returning you to the main menu.');
+        await bot.say('Head to the Report Section to view more detailed scan results!')
       },
     },
     {
       pattern: 'N',
       type: 'string',
-      handler: async (_VulnIPSelect, Typo, bot) => {
-        // return await mainMenu.gotoThread('no_taco');
+      handler: async (_SaveReport, _VulnIPSelect, bot) => {
       await bot.say('Returning you to the main menu')
       },
     },
@@ -140,9 +134,10 @@ VulnIPSelect.ask('Would you like to save a report? {Y/N}',
 );
 VulnIPSelect.addGotoDialog('MainMenu')
 
+//Keyword 'vuln', can be used at anytime to start code
   controller.addDialog(VulnIPSelect)
   controller.hears('vuln', 'message', async(bot,message)=> {
       await bot.beginDialog('VulnScanConvo', message)
   })
- }
+}
 
