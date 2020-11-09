@@ -112,7 +112,7 @@ VulnIPSelect.ask('Would you like to save the report? [Y/N]',
       type: 'string',
       handler: async (_SaveReport, _VulnIPSelect, bot) => {
         await bot.say('Report Saved! Returning you to the main menu.');
-        await bot.say('Head to the Report Section to view more detailed scan results!')
+        await bot.say('Head to the Archived Report Section to view more detailed scan results!')
       },
     },
     {
