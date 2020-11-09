@@ -110,12 +110,11 @@ a.button:hover {
 
 /* chat client */
 #message_window {
-  border-left: 1px solid #CCC;
-  border-right: 1px solid #CCC;
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
+  margin: 0%;
 }
 #message_window .disconnected {
   background: #FFFFCC;
