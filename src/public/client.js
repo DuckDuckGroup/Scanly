@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-/* eslint no-undef: 0, no-console: 0, no-restricted-globals: 0, no-param-reassign: 0 */
+/* eslint no-undef: 0, no-console: 0, no-restricted-globals: 0, no-param-reassign: 0, no-alert: 0 */
 
 const converter = new showdown.Converter();
 converter.setOption('openLinksInNewWindow', true);
@@ -111,9 +111,6 @@ const Botkit = {
         });
     }
   },
-
-  cookieCheck() {},
-
   webhook(message) {
     this.request('/api/messages', message)
       .then((messages) => {
