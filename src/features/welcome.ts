@@ -1,6 +1,11 @@
 import { Botkit, BotkitConversation } from 'botkit';
 
 export default function welcome(controller: Botkit) {
+    /**
+   * Main conversation greets user & displays main menu
+   * @returns nothing (all conversation displayed to user)
+   */
+
   // Welcome shows greeting, legal & collects user info
   const WelcomeMessage = new BotkitConversation('WelcomeMessage', controller);
   WelcomeMessage.say(
@@ -8,15 +13,15 @@ export default function welcome(controller: Botkit) {
   );
   WelcomeMessage.ask(
     'For auditing purposes, what is your full name?',
-    async (response, _WelcomeMessage, bot) => {
-      await bot.say(`Thanks ${response}`);
+    async (FullName, _WelcomeMessage, bot) => {
+      await bot.say(`Thanks ${FullName}`);
     },
     { key: 'name' },
   );
   WelcomeMessage.ask(
-    'And your email address?',
-    async (response, _WelcomeMessage, bot) => {
-      await bot.say(`Ok, saving ${response}`);
+    'And what is your email address?',
+    async (Email, _WelcomeMessage, bot) => {
+      await bot.say(`Ok, saving ${Email}`);
     },
     { key: 'email' },
   );
@@ -32,48 +37,45 @@ export default function welcome(controller: Botkit) {
       {
         pattern: '1',
         type: 'string',
-        handler: async (_ResponseText, _MainMenu, bot) => {
-          // Change to new conversation (waiting to be built)
-          // return await mainMenu.gotoThread('yes_taco');
+        handler: async (_MenuOption, _MainMenu, bot) => {
           await bot.say('Go to Account Breach');
         },
       },
       {
         pattern: '2',
         type: 'string',
-        handler: async (_ResponseText, _MainMenu, bot) => {
-          // return await mainMenu.gotoThread('no_taco');
+        handler: async (_MenuOption, _MainMenu, bot) => {
           await bot.say('Go to Network Enumeration');
         },
       },
       {
+        // Vulnerability Scanner
         pattern: '3',
         type: 'string',
-        handler: async (_ResponseText, _MainMenu, bot) => {
-          // return await mainMenu.gotoThread('no_taco');
+        handler: async (_MenuOption, _MainMenu, bot) => {
           await bot.beginDialog('VulnScanConvo');
         },
       },
       {
         pattern: '4',
         type: 'string',
-        handler: async (_ResponseText, _MainMenu, bot) => {
-          // return await mainMenu.gotoThread('no_taco');
+        handler: async (_MenuOption, _MainMenu, bot) => {
           await bot.say('View Archived Reports');
         },
       },
       {
         default: true,
-        handler: async (_MainMenu, FailedValidation, bot) => {
+        handler: async (_MenuOption, FailedValidation, bot) => {
           await bot.say('Please enter a number between 1 and 4');
           return FailedValidation.repeat();
         },
       },
     ],
-    { key: 'menuOption' },
+    { key: 'MenuOption' },
   );
   controller.addDialog(MainMenu);
 
+  //Display greeting when 'hi' is heard
   controller.hears(
     ['hi', 'hello', 'hey', 'howdy', 'start', 'restart'],
     'message',
@@ -82,7 +84,7 @@ export default function welcome(controller: Botkit) {
     },
   );
 
-  // Can write menu at anytime to view it
+  // Display main menu, when 'menu' is heard
   controller.hears(['menu', 'options', 'option'], 'message', async (bot, message) => {
     await bot.beginDialog('MainMenu', message);
   });
