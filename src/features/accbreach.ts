@@ -9,7 +9,7 @@ export default function AccBreachScanner(controller: Botkit) {
   // Conversation to store main menu
   const AccBreachConvo = new BotkitConversation('AccBreachConvo', controller);
   AccBreachConvo.ask(
-    'Welcome to the Account Breach Scanner!\n\n 1. Individual\n 2. Credential File\n\n Please enter a number:',
+    'Welcome to the Account Breach Scanner!\n\n 1. Individual\n2. Credential File\n\nPlease enter a number:',
     [
       {
         // Individual Scan
@@ -40,18 +40,6 @@ export default function AccBreachScanner(controller: Botkit) {
   AccBreachConvo.addGotoDialog('CredSelect');
   AccBreachConvo.addAction('complete');
   controller.addDialog(AccBreachConvo);
-
-  // Conversation to allow custom flags
-  const VulnCustom = new BotkitConversation('VulnCustom', controller);
-  VulnCustom.ask(
-    'Enter custom flags',
-    async (_VulnFlags, _VulnCustom, bot) => {
-      await bot.beginDialog('CredSelect');
-    },
-    { key: 'Customflags' },
-  );
-  VulnCustom.addAction('complete');
-  controller.addDialog(VulnCustom);
 
   // Conversation to grab IP & run scan
   const CredSelect = new BotkitConversation('CredSelect', controller);
@@ -90,10 +78,9 @@ export default function AccBreachScanner(controller: Botkit) {
     { key: 'TargetCred' },
   );
 
-  CredSelect.say('Results:');
-  CredSelect.say('Credentials were found in 2 Breaches: ');
-  CredSelect.say('Adobe: IDs, Passwords, Payment Information');
-  CredSelect.say('MySpace: E-mails, Passwords, Usernames');
+  CredSelect.say('Results: \nCredentials were found in 2 Breaches');
+  CredSelect.say('Adobe: \n - IDs\n - Passwords\n - Payment Information');
+  CredSelect.say('MySpace: \n - E-mails\n - Passwords\n - Usernames');
   CredSelect.ask(
     'Would you like to save the report? [Y/N]',
     [
