@@ -15,7 +15,7 @@ export default function AccBreachScanner(controller: Botkit) {
         // Individual Scan
         pattern: '1',
         type: 'string',
-        handler: async (_ResponseText, _MainMenu, bot) => {
+        handler: async (_ScanType, _AccBreachMenu, bot) => {
           await bot.say('You selected Individual Scan');
         },
       },
@@ -41,67 +41,42 @@ export default function AccBreachScanner(controller: Botkit) {
   AccBreachConvo.addAction('complete');
   controller.addDialog(AccBreachConvo);
 
-  // Conversation to grab IP & run scan
+  // Conversation to run scan of the input credentials
   const CredSelect = new BotkitConversation('CredSelect', controller);
   CredSelect.ask(
-    'Enter Credentials to Scan (for example email.example@test.com)',
+    'Enter Credentials to Scan (e.g. test@example.com)',
     async (Target, _CredSelect, bot) => {
       await bot.say(`Target to scan: ${Target}`);
     },
     { key: 'TargetCred' },
   );
-  CredSelect.ask(
-    'Are you sure you wish to proceed? [Y/N]',
-    [
-      {
-        pattern: 'Y',
-        type: 'string',
-        handler: async (_Proceed, _CredSelect, bot) => {
-          await bot.say('Starting Scan!');
-        },
-      },
-      {
-        pattern: 'N',
-        type: 'string',
-        handler: async (_CredSelect, _Typo, bot) => {
-          await bot.beginDialog('CredSelect');
-        },
-      },
-      {
-        default: true,
-        handler: async (_CredSelect, FailedValidation, bot) => {
-          await bot.say('Please enter Y or N');
-          return FailedValidation.repeat();
-        },
-      },
-    ],
-    { key: 'TargetCred' },
-  );
 
+  // Output for Credential Scan Demo
   CredSelect.say('Results: \nCredentials were found in 2 Breaches');
   CredSelect.say('Adobe: \n - IDs\n - Passwords\n - Payment Information');
-  CredSelect.say('MySpace: \n - E-mails\n - Passwords\n - Usernames');
+  CredSelect.say('MySpace: \n - Passwords\n - Usernames');
+
+  // Conversation to establish a Report
   CredSelect.ask(
     'Would you like to save the report? [Y/N]',
     [
       {
         pattern: 'Y',
         type: 'string',
-        handler: async (_SaveReport, _CredSelect, bot) => {
-          await bot.say('Report Saved! Returning you to the main menu.');
-          await bot.say('Head to the Archived Report Section to view more detailed scan results!');
+        handler: async (_SaveReport, _AccBreachSelect, bot) => {
+          await bot.say('Report Saved! Returning you to the main menu.\nHead to the Archived Report Section to view more detailed scan results!');
         },
       },
       {
         pattern: 'N',
         type: 'string',
-        handler: async (_SaveReport, _CredSelect, bot) => {
+        handler: async (_SaveReport, _AccBreachSelect, bot) => {
           await bot.say('Returning you to the main menu');
         },
       },
       {
         default: true,
-        handler: async (_CredSelect, FailedValidation, bot) => {
+        handler: async (_AccBreachSelect, FailedValidation, bot) => {
           await bot.say('Please enter Y or N');
           return FailedValidation.repeat();
         },
@@ -111,9 +86,9 @@ export default function AccBreachScanner(controller: Botkit) {
   );
   CredSelect.addGotoDialog('MainMenu');
 
-  // Keyword 'accbreach', can be used at anytime to start code
+  // Keyword 'breach', can be used at anytime to start code
   controller.addDialog(CredSelect);
-  controller.hears('accbreach', 'message', async (bot, message) => {
+  controller.hears('breach', 'message', async (bot, message) => {
     await bot.beginDialog('AccBreachConvo', message);
   });
 }
