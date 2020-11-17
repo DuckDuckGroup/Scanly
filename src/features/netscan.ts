@@ -109,18 +109,9 @@ export default function NetScanFunction(controller: Botkit) {
         pattern: 'analyse',
         type: 'string',
         handler: async (_1, _2, bot) => {
-          await bot.say('Port analysis:');
-          await bot.say('21 | TCP:');
-          await bot.say('FTP version found: vsftpd 2.3.4');
-          await bot.say('Anonymous FTP login enabled');
-          await bot.say('80 | TCP:');
-          await bot.say('Webserver found: Apache httpd 2.2.8 (Ubuntu)');
-          await bot.say('HTTP Page title: TEST SITE');
-          await bot.say('2222 | TCP:');
-          await bot.say('SSH Service found: OpenSSH 4.7 (Debian Ubuntu)');
-          await bot.say('SSH hostkey:');
-          await bot.say('1024 60:0f:cf:e1:c0:5f:6a:74:d6:90:24:fa:c4:d5:6c:cd (DSA)');
-          await bot.say('2048 56:56:24:0f:21:1d:de:a7:2b:ae:61:b1:24:3d:e8:f3 (RSA)');
+          await bot.say(
+            'Port analysis:\n\n .\n\n 21 | TCP:\n\n FTP version found: vsftpd 2.3.4\n\n Anonymous FTP login enabled \n\n .\n\n 80 | TCP:\n\n Webserver found: Apache httpd 2.2.8 (Ubuntu)\n\n HTTP Page title: TEST SITE \n\n .\n\n 2222 | TCP:\n\n SSH Service found: OpenSSH 4.7 (Debian Ubuntu)\n\n SSH hostkey:\n\n 1024 60:0f:cf:e1:c0:5f:6a:74:d6:90:24:fa:c4:d5:6c:cd (DSA)\n\n 2048 56:56:24:0f:21:1d:de:a7:2b:ae:61:b1:24:3d:e8:f3 (RSA)',
+          );
           await bot.beginDialog('MainMenu');
         },
       },
@@ -148,36 +139,25 @@ export default function NetScanFunction(controller: Botkit) {
   PingScan.say('You selected the ping scan');
   PingScan.addChildDialog('ScanRangeConvo', 'range');
   PingScan.say('Scan Started');
-  PingScan.say('Machines found:');
-  PingScan.say('IP Addresses:');
-  PingScan.say('10.0.0.24');
+  PingScan.say('Machines found: \n\n |IP Address | \n\n |-----------| \n\n | 10.0.0.24 |');
   PingScan.addGotoDialog('PostScanConvo');
   controller.addDialog(PingScan);
   const GenScan = new BotkitConversation('GenScanConvo', controller);
   GenScan.say('You selected the general scan');
   GenScan.addChildDialog('ScanRangeConvo', 'range');
   GenScan.say('Scan Started');
-  GenScan.say('Machines found:');
-  GenScan.say('IP Addresses:');
-  GenScan.say('10.0.0.24');
-  GenScan.say('Ports:');
-  GenScan.say('21 | TCP | FTP');
-  GenScan.say('80 | TCP | HTTP');
-  GenScan.say('2222 | TCP | SSH');
+  GenScan.say(
+    'Machines found: \n\n |IP Address | \n\n |-----------| \n\n | 10.0.0.24 | \n\n |Port|Prtcl|Type| \n\n |----|-----|----| \n\n | 21 | TCP |FTP | \n\n | 80 | TCP |HTTP| \n\n |2222| TCP |SSH |',
+  );
   GenScan.addGotoDialog('PostScanConvo');
   controller.addDialog(GenScan);
   const CompScan = new BotkitConversation('CompScanConvo', controller);
   CompScan.say('You selected the comprehensive scan');
   CompScan.addChildDialog('ScanRangeConvo', 'range');
   CompScan.say('Scan Started');
-  CompScan.say('Machines found:');
-  CompScan.say('IP Addresses:');
-  CompScan.say('10.0.0.24');
-  CompScan.say('Ports:');
-  CompScan.say('21 | TCP | FTP : vsftpd 2.3.4');
-  CompScan.say('80 | TCP | HTTP : Apache httpd 2.2.8 (Ubuntu)');
-  CompScan.say('2222 | TCP | SSH : OpenSSH 4.7 (Debian Ubuntu)');
-  CompScan.say('Operating system: Ubuntu (89%), Debian (74%), Other linux (45%), BSD/Unix (13%)');
+  CompScan.say(
+    'Machines found: \n\n |IP Address | \n\n |-----------| \n\n | 10.0.0.24 | \n\n |Port|Prtcl|Type|Version--------------------| \n\n |----|-----|----|---------------------------| \n\n | 21 | TCP |FTP |vsftpd 2.3.4---------------| \n\n | 80 | TCP |HTTP|Apache httpd 2.2.8 (Ubuntu)| \n\n |2222| TCP |SSH |OpenSSH 4.7 (Debian Ubuntu)| \n\n Operating system: Ubuntu (89%), Debian (74%), Other linux (45%), BSD/Unix (13%)',
+  );
   CompScan.addGotoDialog('PostScanConvo');
   controller.addDialog(CompScan);
   const CusScan = new BotkitConversation('CusScanConvo', controller);
