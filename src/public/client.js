@@ -2,13 +2,10 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License.
  */
-
-/* eslint no-undef: 0, no-console: 0, no-restricted-globals: 0, no-param-reassign: 0, no-alert: 0 */
-
 const converter = new showdown.Converter();
 converter.setOption('openLinksInNewWindow', true);
 
-const Botkit = {
+var Botkit = {
   config: {
     ws_url: `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}`,
     reconnect_timeout: 3000,
@@ -27,20 +24,21 @@ const Botkit = {
     });
   },
   trigger(event, details) {
-    const customEvent = new CustomEvent(event, {
+    var event = new CustomEvent(event, {
       detail: details,
     });
-    this.message_window.dispatchEvent(customEvent);
+    this.message_window.dispatchEvent(event);
   },
   request(url, body) {
+    const that = this;
     return new Promise((resolve, reject) => {
       const xmlhttp = new XMLHttpRequest();
 
-      xmlhttp.onreadystatechange = () => {
-        if (xmlhttp.readyState === XMLHttpRequest.DONE) {
-          if (xmlhttp.status === 200) {
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+          if (xmlhttp.status == 200) {
             const response = xmlhttp.responseText;
-            if (response !== '') {
+            if (response != '') {
               let message = null;
               try {
                 message = JSON.parse(response);
@@ -64,6 +62,7 @@ const Botkit = {
     });
   },
   send(text, e) {
+    const that = this;
     if (e) e.preventDefault();
     if (!text) {
       return;
@@ -74,9 +73,9 @@ const Botkit = {
     };
 
     this.clearReplies();
-    this.renderMessage(message);
+    that.renderMessage(message);
 
-    this.deliverMessage({
+    that.deliverMessage({
       type: 'message',
       text,
       user: this.guid,
@@ -86,6 +85,8 @@ const Botkit = {
     this.input.value = '';
 
     this.trigger('sent', message);
+
+    return false;
   },
   deliverMessage(message) {
     if (this.options.use_sockets) {
@@ -94,119 +95,132 @@ const Botkit = {
       this.webhook(message);
     }
   },
-  getHistory() {
-    if (this.guid) {
-      this.request('/botkit/history', {
-        user: this.guid,
-      })
-        .then((history) => {
-          if (history.success) {
-            this.trigger('history_loaded', history.history);
-          } else {
-            this.trigger('history_error', new Error(history.error));
-          }
-        })
-        .catch((err) => {
-          this.trigger('history_error', err);
-        });
+  getHistory(guid) {
+    const that = this;
+    if (that.guid) {
+      that.request('/botkit/history', {
+        user: that.guid,
+      }).then((history) => {
+        if (history.success) {
+          that.trigger('history_loaded', history.history);
+        } else {
+          that.trigger('history_error', new Error(history.error));
+        }
+      }).catch((err) => {
+        that.trigger('history_error', err);
+      });
     }
   },
   webhook(message) {
-    this.request('/api/messages', message)
-      .then((messages) => {
-        messages.forEach((m) => {
-          this.trigger(m.type, m);
-        });
-      })
-      .catch((err) => {
-        this.trigger('webhook_error', err);
+    const that = this;
+
+    that.request('/api/messages', message).then((messages) => {
+      messages.forEach((message) => {
+        that.trigger(message.type, message);
       });
+    }).catch((err) => {
+      that.trigger('webhook_error', err);
+    });
   },
   connect(user) {
+    const that = this;
+
     if (user && user.id) {
       Botkit.setCookie('botkit_guid', user.id, 1);
 
       user.timezone_offset = new Date().getTimezoneOffset();
-      this.current_user = user;
+      that.current_user = user;
       console.log('CONNECT WITH USER', user);
     }
 
     // connect to the chat server!
-    if (this.options.use_sockets) {
-      this.connectWebsocket(this.config.ws_url);
+    if (that.options.use_sockets) {
+      that.connectWebsocket(that.config.ws_url);
     } else {
-      this.connectWebhook();
+      that.connectWebhook();
     }
   },
   connectWebhook() {
-    this.guid = this.generate_guid();
-    Botkit.setCookie('botkit_guid', this.guid, 1);
+    const that = this;
+    if (Botkit.getCookie('botkit_guid')) {
+      that.guid = Botkit.getCookie('botkit_guid');
+      connectEvent = 'welcome_back';
+    } else {
+      that.guid = that.generate_guid();
+      Botkit.setCookie('botkit_guid', that.guid, 1);
+    }
 
     if (this.options.enable_history) {
-      this.getHistory();
+      that.getHistory();
     }
 
     // connect immediately
-    this.trigger('connected', {});
-    this.webhook({
+    that.trigger('connected', {});
+    that.webhook({
       type: connectEvent,
-      user: this.guid,
+      user: that.guid,
       channel: 'webhook',
     });
   },
-  connectWebsocket(websocketURL) {
+  connectWebsocket(ws_url) {
+    const that = this;
     // Create WebSocket connection.
-    this.socket = new WebSocket(websocketURL);
+    that.socket = new WebSocket(ws_url);
 
-    const connectEvent = 'hello';
-    this.guid = this.generate_guid();
-    Botkit.setCookie('botkit_guid', this.guid, 1);
+    let connectEvent = 'hello';
+    if (Botkit.getCookie('botkit_guid')) {
+      that.guid = Botkit.getCookie('botkit_guid');
+      connectEvent = 'welcome_back';
+    } else {
+      that.guid = that.generate_guid();
+      Botkit.setCookie('botkit_guid', that.guid, 1);
+    }
 
     if (this.options.enable_history) {
-      this.getHistory();
+      that.getHistory();
     }
 
     // Connection opened
-    this.socket.addEventListener('open', (event) => {
+    that.socket.addEventListener('open', (event) => {
       console.log('CONNECTED TO SOCKET');
-      this.reconnect_count = 0;
-      this.trigger('connected', event);
-      this.deliverMessage({
+      that.reconnect_count = 0;
+      that.trigger('connected', event);
+      that.deliverMessage({
         type: connectEvent,
-        user: this.guid,
+        user: that.guid,
         channel: 'socket',
-        user_profile: this.current_user ? this.current_user : null,
+        user_profile: that.current_user ? that.current_user : null,
       });
     });
 
-    this.socket.addEventListener('error', (event) => {
+    that.socket.addEventListener('error', (event) => {
       console.error('ERROR', event);
     });
 
-    this.socket.addEventListener('close', (event) => {
+    that.socket.addEventListener('close', (event) => {
       console.log('SOCKET CLOSED!');
-      this.trigger('disconnected', event);
-      if (this.reconnect_count < this.config.max_reconnect) {
+      that.trigger('disconnected', event);
+      if (that.reconnect_count < that.config.max_reconnect) {
         setTimeout(() => {
-          console.log('RECONNECTING ATTEMPT ', this.reconnect_count + 1);
-          this.connectWebsocket(this.config.ws_url);
-        }, this.config.reconnect_timeout);
+          console.log('RECONNECTING ATTEMPT ', ++that.reconnect_count);
+          that.connectWebsocket(that.config.ws_url);
+        }, that.config.reconnect_timeout);
       } else {
-        this.message_window.className = 'offline';
+        that.message_window.className = 'offline';
       }
     });
 
     // Listen for messages
-    this.socket.addEventListener('message', (event) => {
+    that.socket.addEventListener('message', (event) => {
       let message = null;
       try {
         message = JSON.parse(event.data);
       } catch (err) {
-        this.trigger('socket_error', err);
+        that.trigger('socket_error', err);
         return;
       }
 
-      this.trigger(message.type, message);
+      that.trigger(message.type, message);
     });
   },
   clearReplies() {
@@ -219,19 +233,20 @@ const Botkit = {
     this.input.focus();
   },
   renderMessage(message) {
-    if (!this.next_line) {
-      this.next_line = document.createElement('div');
-      this.message_list.appendChild(this.next_line);
+    const that = this;
+    if (!that.next_line) {
+      that.next_line = document.createElement('div');
+      that.message_list.appendChild(that.next_line);
     }
     if (message.text) {
       message.html = converter.makeHtml(message.text);
     }
 
-    this.next_line.innerHTML = this.message_template({
+    that.next_line.innerHTML = that.message_template({
       message,
     });
     if (!message.isTyping) {
-      delete this.next_line;
+      delete (that.next_line);
     }
   },
   triggerScript(script, thread) {
@@ -285,9 +300,24 @@ const Botkit = {
   },
   setCookie(cname, cvalue, exdays) {
     const d = new Date();
-    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     const expires = `expires=${d.toUTCString()}`;
     document.cookie = `${cname}=${cvalue};${expires};path=/`;
+  },
+  getCookie(cname) {
+    const name = `${cname}=`;
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return '';
   },
   generate_guid() {
     function s4() {
@@ -295,108 +325,116 @@ const Botkit = {
         .toString(16)
         .substring(1);
     }
-
-    return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
+    return `${s4() + s4()}-${s4()}-${s4()}-${
+      s4()}-${s4()}${s4()}${s4()}`;
   },
   boot(user) {
     console.log('Booting up');
 
-    this.message_window = document.getElementById('message_window');
+    const that = this;
 
-    this.message_list = document.getElementById('message_list');
+    that.message_window = document.getElementById('message_window');
+
+    that.message_list = document.getElementById('message_list');
 
     const source = document.getElementById('message_template').innerHTML;
-    this.message_template = Handlebars.compile(source);
+    that.message_template = Handlebars.compile(source);
 
-    this.replies = document.getElementById('message_replies');
+    that.replies = document.getElementById('message_replies');
 
-    this.input = document.getElementById('messenger_input');
+    that.input = document.getElementById('messenger_input');
 
-    this.focus();
+    that.focus();
 
-    this.on('connected', () => {
-      this.message_window.className = 'connected';
-      this.input.disabled = false;
-      this.sendEvent({
+    that.on('connected', () => {
+      that.message_window.className = 'connected';
+      that.input.disabled = false;
+      that.sendEvent({
         name: 'connected',
       });
     });
 
-    this.on('disconnected', () => {
-      this.message_window.className = 'disconnected';
-      this.input.disabled = true;
+    that.on('disconnected', () => {
+      that.message_window.className = 'disconnected';
+      that.input.disabled = true;
     });
 
-    this.on('webhook_error', (err) => {
+    that.on('webhook_error', (err) => {
       alert('Error sending message!');
       console.error('Webhook Error', err);
     });
 
-    this.on('typing', () => {
-      this.clearReplies();
-      this.renderMessage({
+    that.on('typing', () => {
+      that.clearReplies();
+      that.renderMessage({
         isTyping: true,
       });
     });
 
-    this.on('sent', () => {
+    that.on('sent', () => {
       // do something after sending
     });
 
-    this.on('message', (message) => {
+    that.on('message', (message) => {
       console.log('RECEIVED MESSAGE', message);
-      this.renderMessage(message);
+      that.renderMessage(message);
     });
 
-    this.on('message', (message) => {
+    that.on('message', (message) => {
       if (message.goto_link) {
         window.location = message.goto_link;
       }
     });
 
-    this.on('message', (message) => {
-      this.clearReplies();
+    that.on('message', (message) => {
+      that.clearReplies();
       if (message.quick_replies) {
         const list = document.createElement('ul');
 
         const elements = [];
-        for (let r = 0; r < message.quick_replies.length; r + 1) {
-          const li = document.createElement('li');
-          const el = document.createElement('a');
-          el.innerHTML = message.quick_replies[r].title;
-          el.href = '#';
+        for (let r = 0; r < message.quick_replies.length; r++) {
+          (function (reply) {
+            const li = document.createElement('li');
+            const el = document.createElement('a');
+            el.innerHTML = reply.title;
+            el.href = '#';
 
-          el.onclick = () => {
-            this.quickReply(message.quick_replies[r].payload);
-          };
+            el.onclick = function () {
+              that.quickReply(reply.payload);
+            };
 
-          li.appendChild(el);
-          list.appendChild(li);
-          elements.push(li);
+            li.appendChild(el);
+            list.appendChild(li);
+            elements.push(li);
+          }(message.quick_replies[r]));
         }
 
-        this.replies.appendChild(list);
+        that.replies.appendChild(list);
 
         // uncomment this code if you want your quick replies to scroll horizontally instead of stacking
-        // let width = 0;
+        // var width = 0;
         // // resize this element so it will scroll horizontally
-        // for (let e = 0; e < elements.length; e++) {
+        // for (var e = 0; e < elements.length; e++) {
         //     width = width + elements[e].offsetWidth + 18;
         // }
         // list.style.width = width + 'px';
 
-        this.input.disabled = !!message.disable_input;
+        if (message.disable_input) {
+          that.input.disabled = true;
+        } else {
+          that.input.disabled = false;
+        }
       } else {
-        this.input.disabled = false;
+        that.input.disabled = false;
       }
     });
 
-    this.on('history_loaded', (history) => {
+    that.on('history_loaded', (history) => {
       if (history) {
-        for (let m = 0; m < history.length; m + 1) {
-          this.renderMessage({
+        for (let m = 0; m < history.length; m++) {
+          that.renderMessage({
             text: history[m].text,
-            type: history[m].type === 'message_received' ? 'outgoing' : 'incoming', // set appropriate CSS class
+            type: history[m].type == 'message_received' ? 'outgoing' : 'incoming', // set appropriate CSS class
           });
         }
       }
@@ -404,11 +442,11 @@ const Botkit = {
 
     if (window.self !== window.top) {
       // this is embedded in an iframe.
-      // send a message to the master frame to tell it this the chat client is ready
+      // send a message to the master frame to tell it that the chat client is ready
       // do NOT automatically connect... rather wait for the connect command.
-      this.parent_window = window.parent;
-      window.addEventListener('message', this.receiveCommand, false);
-      this.sendEvent({
+      that.parent_window = window.parent;
+      window.addEventListener('message', that.receiveCommand, false);
+      that.sendEvent({
         type: 'event',
         name: 'booted',
       });
@@ -416,15 +454,15 @@ const Botkit = {
     } else {
       console.log('Messenger booted in stand-alone mode');
       // this is a stand-alone client. connect immediately.
-      this.connect(user);
+      that.connect(user);
     }
 
-    return this;
+    return that;
   },
 };
 
-(() => {
+(function () {
   // your page initialization code here
   // the DOM will be available here
   Botkit.boot();
-})();
+}());

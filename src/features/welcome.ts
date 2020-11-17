@@ -32,7 +32,7 @@ export default function welcome(controller: Botkit) {
   // Display main menu - will loop until a valid choice is chosen
   const MainMenu = new BotkitConversation('MainMenu', controller);
   MainMenu.ask(
-    'Welcome to the main menu!\n\n 1. Account Breach Dectection\n 2. Network Enummeration\n 3. Network Vulnerability Scan\n4. View Archived Reports\n\nPlease enter a number:',
+    'Welcome to the main menu!\n\n 1. Account Breach Detection\n 2. Network Enumeration\n 3. Network Vulnerability Scan\n4. View Archived Reports\n\nPlease enter a number:',
     [
       {
         pattern: '1',
@@ -45,7 +45,7 @@ export default function welcome(controller: Botkit) {
         pattern: '2',
         type: 'string',
         handler: async (_MenuOption, _MainMenu, bot) => {
-          await bot.say('Go to Network Enumeration');
+          await bot.beginDialog('NetScanConvo');
         },
       },
       {
