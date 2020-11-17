@@ -32,13 +32,13 @@ export default function welcome(controller: Botkit) {
   // Display main menu - will loop until a valid choice is chosen
   const MainMenu = new BotkitConversation('MainMenu', controller);
   MainMenu.ask(
-    'Welcome to the main menu!\n\n 1. Account Breach Detection\n 2. Network Enumeration\n 3. Network Vulnerability Scan\n4. View Archived Reports\n\nPlease enter a number:',
-    [
+    'Welcome to the main menu!\n\n 1. Account Breach Detection\n 2. Network Enumeration\n 3. Network Vulnerability Scan\n4. View Archived Reports\n\nPlease enter a number:',    [
       {
+        // Account Breach Scanner
         pattern: '1',
         type: 'string',
         handler: async (_MenuOption, _MainMenu, bot) => {
-          await bot.say('Go to Account Breach');
+          await bot.beginDialog('AccBreachConvo');
         },
       },
       {
