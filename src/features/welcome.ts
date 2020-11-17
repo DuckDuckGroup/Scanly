@@ -60,7 +60,7 @@ export default function welcome(controller: Botkit) {
         pattern: '4',
         type: 'string',
         handler: async (_MenuOption, _MainMenu, bot) => {
-          await bot.beginDialog('VeiwArchiveMessage');
+          await bot.beginDialog('ArchiveMenu');
         },
       },
       {
