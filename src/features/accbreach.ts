@@ -10,9 +10,7 @@ export default function AccBreachScanner(controller: Botkit) {
   const AccBreachConvo = new BotkitConversation('AccBreachConvo', controller);
   AccBreachConvo.ask(
     {
-      text: [
-        'Welcome to the Account Breach Scanner!\n\n 1. Individual\n2. Credential File\n\nPlease enter a number:',
-      ],
+      text: ['Welcome to the Account Breach Scanner!\n\nPlease select an option:'],
       quick_replies: [
         {
           content_type: 'text',
@@ -21,7 +19,7 @@ export default function AccBreachScanner(controller: Botkit) {
         },
         {
           content_type: 'text',
-          title: 'You selected Credential File Scan',
+          title: 'Credential File Scan',
           payload: 'credential',
         },
       ],
@@ -78,12 +76,12 @@ export default function AccBreachScanner(controller: Botkit) {
       quick_replies: [
         {
           content_type: 'text',
-          title: 'Individual Scan',
+          title: 'Yes',
           payload: 'save_yes',
         },
         {
           content_type: 'text',
-          title: 'You selected Credential File Scan',
+          title: 'No',
           payload: 'save_no',
         },
       ],

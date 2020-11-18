@@ -9,35 +9,48 @@ export default function VulnScanner(controller: Botkit) {
   // Convosation to store main menu
   const VulnScanConvo = new BotkitConversation('VulnScanConvo', controller);
   VulnScanConvo.ask(
-    'Welcome to the Vulnerability Scanner!\n\n 1. Quick Scan\n 2. Normal Scan\n 3. In-depth Scan\n4. Custom Scan\n\nPlease enter a number:',
+    {
+      text: ['Welcome to the Vulnerability Scanner!\n\nPlease select an option:'],
+      quick_replies: [
+        {
+          content_type: 'text',
+          title: 'Quick Scan',
+          payload: 'quick',
+        },
+        {
+          content_type: 'text',
+          title: 'Normal Scan',
+          payload: 'normal',
+        },
+        {
+          content_type: 'text',
+          title: 'In-depth Scan',
+          payload: 'idepth',
+        },
+        {
+          content_type: 'text',
+          title: 'Custom Scan',
+          payload: 'custom',
+        },
+      ],
+    },
     [
       {
-        // Quick Scan
-        pattern: '1',
+        pattern: 'quick',
         type: 'string',
         handler: async (_ResponseText, _MainMenu, bot) => {
           await bot.say('You selected Quick Scan');
         },
       },
       {
-        // Normal Scan
-        pattern: '2',
+        pattern: 'normal',
         type: 'string',
         handler: async (_ScanType, _VulnMenu, bot) => {
           await bot.say('You selected Normal Scan');
         },
       },
       {
-        // In-depth scan
-        pattern: '3',
-        type: 'string',
-        handler: async (_ScanType, _VulnMenu, bot) => {
-          await bot.say('You selected In-depth Scan');
-        },
-      },
-      {
-        // Custom Scan
-        pattern: '4',
+        pattern: 'idepth',
         type: 'string',
         handler: async (_ScanType, _VulnMenu, bot) => {
           await bot.say('You selected In-depth Scan');
@@ -45,14 +58,22 @@ export default function VulnScanner(controller: Botkit) {
         },
       },
       {
+        pattern: 'custom',
+        type: 'string',
+        handler: async (_ScanType, _VulnMenu, bot) => {
+          await bot.say('You selected Custom Scan');
+          await bot.beginDialog('VulnCustom');
+        },
+      },
+      {
         default: true,
-        handler: async (_VulnMenu, FailedValidation, bot) => {
-          await bot.say('Please enter a number between 1 and 4');
+        handler: async (_, FailedValidation, bot) => {
+          await bot.say('Please select one of the presented options');
           return FailedValidation.repeat();
         },
       },
     ],
-    { key: 'VulnScanType' },
+    null,
   );
   VulnScanConvo.addGotoDialog('VulnIPSelect');
   VulnScanConvo.addAction('complete');
@@ -80,17 +101,31 @@ export default function VulnScanner(controller: Botkit) {
     { key: 'TargetIP' },
   );
   VulnIPSelect.ask(
-    'Are you sure you wish to proceed? [Y/N]',
+    {
+      text: ['Are you sure you wish to proceed?'],
+      quick_replies: [
+        {
+          content_type: 'text',
+          title: 'Yes',
+          payload: 'continue_yes',
+        },
+        {
+          content_type: 'text',
+          title: 'No',
+          payload: 'continue_no',
+        },
+      ],
+    },
     [
       {
-        pattern: 'Y',
+        pattern: 'continue_yes',
         type: 'string',
         handler: async (_Proceed, _VulnIPSelect, bot) => {
           await bot.say('Starting Scan!');
         },
       },
       {
-        pattern: 'N',
+        pattern: 'continue_no',
         type: 'string',
         handler: async (_VulnIPSelect, _Typo, bot) => {
           await bot.beginDialog('VulnIPSelect');
@@ -98,24 +133,37 @@ export default function VulnScanner(controller: Botkit) {
       },
       {
         default: true,
-        handler: async (_VulnIPSelect, FailedValidation, bot) => {
-          await bot.say('Please enter Y or N');
+        handler: async (_, FailedValidation, bot) => {
+          await bot.say('Please select one of the presented options');
           return FailedValidation.repeat();
         },
       },
     ],
     { key: 'TargetIP' },
   );
-
   VulnIPSelect.say('Results:');
   VulnIPSelect.say('High Severity: 23');
   VulnIPSelect.say('Medium Severity: 45');
   VulnIPSelect.say('Low Severity: 87');
   VulnIPSelect.ask(
-    'Would you like to save the report? [Y/N]',
+    {
+      text: ['Would you like to save the report?'],
+      quick_replies: [
+        {
+          content_type: 'text',
+          title: 'Yes',
+          payload: 'save_yes',
+        },
+        {
+          content_type: 'text',
+          title: 'No',
+          payload: 'save_no',
+        },
+      ],
+    },
     [
       {
-        pattern: 'Y',
+        pattern: 'save_yes',
         type: 'string',
         handler: async (_SaveReport, _VulnIPSelect, bot) => {
           await bot.say('Report Saved! Returning you to the main menu.');
@@ -123,7 +171,7 @@ export default function VulnScanner(controller: Botkit) {
         },
       },
       {
-        pattern: 'N',
+        pattern: 'save_no',
         type: 'string',
         handler: async (_SaveReport, _VulnIPSelect, bot) => {
           await bot.say('Returning you to the main menu');
@@ -131,8 +179,8 @@ export default function VulnScanner(controller: Botkit) {
       },
       {
         default: true,
-        handler: async (_VulnIPSelect, FailedValidation, bot) => {
-          await bot.say('Please enter Y or N');
+        handler: async (_, FailedValidation, bot) => {
+          await bot.say('Please select one of the presented options');
           return FailedValidation.repeat();
         },
       },
