@@ -21,11 +21,11 @@ export default function NetScanFunction(controller: Botkit) {
           title: '192.168.1.0/24',
           payload: '24range',
         },
-        {
-          content_type: 'text',
-          title: 'Custom',
-          payload: 'cusrange',
-        },
+        // {
+        //   content_type: 'text',
+        //   title: 'Custom',
+        //   payload: 'cusrange',
+        // },
       ],
     },
     [
@@ -44,11 +44,11 @@ export default function NetScanFunction(controller: Botkit) {
         type: 'string',
         handler: async () => {},
       },
-      {
-        pattern: 'cusrange',
-        type: 'string',
-        handler: async () => {},
-      },
+      // {
+      //   pattern: 'cusrange',
+      //   type: 'string',
+      //   handler: async () => {},
+      // },
       {
         default: true,
         handler: async (_, FailedValidation, bot) => {
@@ -134,7 +134,6 @@ export default function NetScanFunction(controller: Botkit) {
   );
   controller.addDialog(PostScan);
 
-  // TODO/IMPORTANT: Finish off ports
   const PingScan = new BotkitConversation('PingScanConvo', controller);
   PingScan.say('You selected the ping scan');
   PingScan.addChildDialog('ScanRangeConvo', 'range');
@@ -160,15 +159,14 @@ export default function NetScanFunction(controller: Botkit) {
   );
   CompScan.addGotoDialog('PostScanConvo');
   controller.addDialog(CompScan);
-  const CusScan = new BotkitConversation('CusScanConvo', controller);
-  CusScan.say('');
-  controller.addDialog(CusScan);
+  // const CusScan = new BotkitConversation('CusScanConvo', controller);
+  // CusScan.say('');
+  // controller.addDialog(CusScan);
 
   const NetScan = new BotkitConversation('NetScanConvo', controller);
-  NetScan.say('This is the enumeration module');
   NetScan.ask(
     {
-      text: ['Please Choose a Scan Below:'],
+      text: ['This is the enumeration module \n\n Please Choose a Scan Below:'],
       quick_replies: [
         {
           content_type: 'text',
@@ -185,11 +183,11 @@ export default function NetScanFunction(controller: Botkit) {
           title: 'Comprehensive Scan',
           payload: 'compScan',
         },
-        {
-          content_type: 'text',
-          title: 'Custom Scan',
-          payload: 'custScan',
-        },
+        // {
+        //   content_type: 'text',
+        //   title: 'Custom Scan',
+        //   payload: 'custScan',
+        // },
       ],
     },
     [
@@ -214,13 +212,13 @@ export default function NetScanFunction(controller: Botkit) {
           await bot.beginDialog('CompScanConvo');
         },
       },
-      {
-        pattern: 'custScan',
-        type: 'string',
-        handler: async (_1, _2, bot) => {
-          await bot.beginDialog('CusScanConvo');
-        },
-      },
+      // {
+      //   pattern: 'custScan',
+      //   type: 'string',
+      //   handler: async (_1, _2, bot) => {
+      //     await bot.beginDialog('CusScanConvo');
+      //   },
+      // },
       {
         default: true,
         handler: async (_1, FailedValidation, bot) => {
@@ -235,10 +233,5 @@ export default function NetScanFunction(controller: Botkit) {
 
   controller.hears(['netscan'], 'message', async (bot, message) => {
     await bot.beginDialog('NetScanConvo', message);
-  });
-
-  // Can write menu at anytime to view it
-  controller.hears(['menu', 'options', 'option'], 'message', async (bot, message) => {
-    await bot.beginDialog('MainMenu', message);
   });
 }
