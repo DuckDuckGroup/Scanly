@@ -1,6 +1,6 @@
 import { Botkit, BotkitConversation } from 'botkit';
 
-export default function archiveNew(controller: Botkit) {
+export default function archive(controller: Botkit) {
   /**
    * Controls conversation for the report section. Use vuln to start it!
    * @returns nothing (all conversation displayed to user)
