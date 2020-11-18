@@ -9,19 +9,33 @@ export default function AccBreachScanner(controller: Botkit) {
   // Conversation to store main menu
   const AccBreachConvo = new BotkitConversation('AccBreachConvo', controller);
   AccBreachConvo.ask(
-    'Welcome to the Account Breach Scanner!\n\n 1. Individual\n2. Credential File\n\nPlease enter a number:',
+    {
+      text: [
+        'Welcome to the Account Breach Scanner!\n\n 1. Individual\n2. Credential File\n\nPlease enter a number:',
+      ],
+      quick_replies: [
+        {
+          content_type: 'text',
+          title: 'Individual Scan',
+          payload: 'individual',
+        },
+        {
+          content_type: 'text',
+          title: 'You selected Credential File Scan',
+          payload: 'credential',
+        },
+      ],
+    },
     [
       {
-        // Individual Scan
-        pattern: '1',
+        pattern: 'individual', // Individual Scan
         type: 'string',
         handler: async (_ScanType, _AccBreachMenu, bot) => {
           await bot.say('You selected Individual Scan');
         },
       },
       {
-        // Credential File Scan
-        pattern: '2',
+        pattern: 'credential', // Credential File Scan
         type: 'string',
         handler: async (_ScanType, _AccBreachMenu, bot) => {
           await bot.say('You selected Credential File Scan');
@@ -29,14 +43,15 @@ export default function AccBreachScanner(controller: Botkit) {
       },
       {
         default: true,
-        handler: async (_AccBreachMenu, FailedValidation, bot) => {
-          await bot.say('Please enter a number; 1 or 2');
+        handler: async (_, FailedValidation, bot) => {
+          await bot.say('Please select one of the presented options');
           return FailedValidation.repeat();
         },
       },
     ],
-    { key: 'AccBreachScanType' },
+    null,
   );
+
   AccBreachConvo.addGotoDialog('CredSelect');
   AccBreachConvo.addAction('complete');
   controller.addDialog(AccBreachConvo);
@@ -58,31 +73,47 @@ export default function AccBreachScanner(controller: Botkit) {
 
   // Conversation to establish a Report
   CredSelect.ask(
-    'Would you like to save the report? [Y/N]',
+    {
+      text: ['Would you like to save the report?'],
+      quick_replies: [
+        {
+          content_type: 'text',
+          title: 'Individual Scan',
+          payload: 'save_yes',
+        },
+        {
+          content_type: 'text',
+          title: 'You selected Credential File Scan',
+          payload: 'save_no',
+        },
+      ],
+    },
     [
       {
-        pattern: 'Y',
+        pattern: 'save_yes',
         type: 'string',
         handler: async (_SaveReport, _AccBreachSelect, bot) => {
-          await bot.say('Report Saved! Returning you to the main menu.\nHead to the Archived Report Section to view more detailed scan results!');
+          await bot.say(
+            'Report Saved! Returning you to the main menu.\nHead to the Archived Report Section to view more detailed scan results!',
+          );
         },
       },
       {
-        pattern: 'N',
+        pattern: 'save_no',
         type: 'string',
-        handler: async (_SaveReport, _AccBreachSelect, bot) => {
+        handler: async (_ScanType, _AccBreachMenu, bot) => {
           await bot.say('Returning you to the main menu');
         },
       },
       {
         default: true,
-        handler: async (_AccBreachSelect, FailedValidation, bot) => {
-          await bot.say('Please enter Y or N');
+        handler: async (_, FailedValidation, bot) => {
+          await bot.say('Please select one of the presented options');
           return FailedValidation.repeat();
         },
       },
     ],
-    { key: 'menuOption' },
+    null,
   );
   CredSelect.addGotoDialog('MainMenu');
 
