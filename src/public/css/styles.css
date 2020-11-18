@@ -9,16 +9,16 @@ html {
   padding: 0;
   font-size: 18px;
   background-color: #252525;
-  font-family: "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .box {
-  border: 2px solid #CCC;
+  border: 2px solid #ccc;
   padding: 1rem calc(1rem - 2px);
   margin-bottom: 1rem;
 }
 .box:after {
-  content: "";
+  content: '';
   display: table;
   clear: both;
 }
@@ -60,7 +60,7 @@ div.input label {
   border: 1px solid #999;
   border-radius: 6px;
   padding: 5px;
-  background: #F0F0F0;
+  background: #f0f0f0;
 }
 .addon input,
 .addon textarea {
@@ -80,7 +80,7 @@ div.input label {
   padding: 0.5rem;
 }
 .addon button:hover {
-  background: #FFF;
+  background: #fff;
   color: #a795ef;
 }
 
@@ -101,7 +101,7 @@ a.button {
   text-align: center;
   text-decoration: none;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-  background-color: #FFF;
+  background-color: #fff;
   transition: box-shadow 0.1s linear;
 }
 a.button:hover {
@@ -117,7 +117,7 @@ a.button:hover {
   margin: 0%;
 }
 #message_window .disconnected {
-  background: #FFFFCC;
+  background: #ffffcc;
   padding: 0.25rem;
 }
 #message_window.connected .disconnected {
@@ -130,8 +130,8 @@ a.button:hover {
   display: none;
 }
 #message_window.offline .offline {
-  background: #FF0000;
-  color: #FFF;
+  background: #ff0000;
+  color: #fff;
   padding: 0.25rem;
   display: block;
 }
@@ -145,7 +145,7 @@ a.button:hover {
   width: 100%;
   background: url(../images/nav-bg.gif) #353535;
   border-bottom: 4px solid #434343;
-  box-shadow: 0px 1px 3px rgba(0,0,0,0.25);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
 }
 
 #message_window section {
@@ -164,9 +164,9 @@ a.button:hover {
 
   width: 100%;
   background: url(../images/nav-bg.gif) #353535;
-  box-shadow: 0px 1px 3px rgba(0,0,0,0.25);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
 }
-#message_window footer input[type=text] {
+#message_window footer input[type='text'] {
   flex-grow: 1;
   font-size: 1.2em;
   outline: none;
@@ -200,7 +200,7 @@ a.button:hover {
 #message_window .message {
   font-size: 1em;
   padding: 0.5rem;
-  background: #F0F0F0;
+  background: #f0f0f0;
   color: #333;
   border-radius: 5px;
   width: auto;
@@ -208,7 +208,7 @@ a.button:hover {
   max-width: 75%;
 }
 #message_window .file_attachment {
-  background: #F0F0F0;
+  background: #f0f0f0;
   color: #333;
   border-radius: 5px;
   display: inline-block;
@@ -273,7 +273,7 @@ a.button:hover {
 }
 #message_window #message_replies a:hover {
   background: #a795ef;
-  color: #FFF;
+  color: #fff;
 }
 
 /* typing indicator CSS based on code by Joseph Fusco -> https://codepen.io/fusco/pen/XbpaYv */
@@ -314,7 +314,7 @@ a.button:hover {
   margin: auto;
 }
 #home:after {
-  content: "";
+  content: '';
   display: table;
   clear: both;
 }
