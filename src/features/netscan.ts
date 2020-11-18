@@ -1,6 +1,10 @@
 import { Botkit, BotkitConversation } from 'botkit';
 
 export default function NetScanFunction(controller: Botkit) {
+  /**
+   * "Runs" the nmap scanner and returns data + analysis
+   * @returns nothing (all conversation displayed to user)
+   */
   const ScanRange = new BotkitConversation('ScanRangeConvo', controller);
   ScanRange.ask(
     {
