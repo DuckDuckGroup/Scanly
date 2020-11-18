@@ -36,22 +36,30 @@ export default function archiveNew(controller: Botkit) {
       {
         pattern: 'AccountBreach',
         type: 'string',
-        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {await bot.beginDialog('AccountReport');},
+        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {
+          await bot.beginDialog('AccountReport');
+        },
       },
       {
         pattern: 'NetworkScan',
         type: 'string',
-        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {await bot.beginDialog('ScanReport');},
+        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {
+          await bot.beginDialog('ScanReport');
+        },
       },
       {
         pattern: 'Vuln',
         type: 'string',
-        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {await bot.beginDialog('VulnReport');},
+        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {
+          await bot.beginDialog('VulnReport');
+        },
       },
       {
         pattern: 'menu',
         type: 'string',
-        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {await bot.beginDialog('MainMenu');},
+        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {
+          await bot.beginDialog('MainMenu');
+        },
       },
       {
         default: true,
@@ -63,142 +71,168 @@ export default function archiveNew(controller: Botkit) {
     ],
     null,
   );
-    controller.addDialog(ArchiveMenu);
+  controller.addDialog(ArchiveMenu);
 
-    const AccountReport = new BotkitConversation('AccountReport', controller);
-    AccountReport.ask(
-      {
-        text: ['Please select which reports you would like to view:'],
-        quick_replies: [
-          {
-            content_type: 'text',
-            title: '2020-10-11 At 10:23 By Luke Wallis',
-            payload: 'DemoReport',
-          },
-          {
-            content_type: 'text',
-            title: 'Go Back',
-            payload: 'ReportMenu',
-          },
-        ],
-      },
-      [
+  const AccountReport = new BotkitConversation('AccountReport', controller);
+  AccountReport.ask(
+    {
+      text: ['Please select which reports you would like to view:'],
+      quick_replies: [
         {
-          pattern: 'DemoReport',
-          type: 'string',
-          handler: async (_AccountReportOption, _AccountReport, bot) => {await bot.say('Please visit https://duckduckgroup.github.io/reports/AccountBreach.pdf to view the report');},
+          content_type: 'text',
+          title: '2020-10-11 At 10:23 By Luke Wallis',
+          payload: 'DemoReport',
         },
         {
-          pattern: 'ReportMenu',
-          type: 'string',
-          handler: async (_AccountReportOption, _AccountReport, bot) => {await bot.beginDialog('ArchiveMenu');},
-        },
-        {
-          default: true,
-          handler: async (_, FailedValidation, bot) => {
-            await bot.say('Please select one of the presented options');
-            return FailedValidation.repeat();
-          },
+          content_type: 'text',
+          title: 'Go Back',
+          payload: 'ReportMenu',
         },
       ],
-      null,
-    );
-    AccountReport.addGotoDialog('ArchiveMenu');
-    controller.addDialog(AccountReport);
-
-    const ScanReport = new BotkitConversation('ScanReport', controller);
-    ScanReport.ask(
+    },
+    [
       {
-        text: ['Please select which reports you would like to view:'],
-        quick_replies: [
-          {
-            content_type: 'text',
-            title: 'Full 2020-10-11 At 14:34 By Luke Wallis',
-            payload: 'DemoReportAdvanced',
-          },
-          {
-            content_type: 'text',
-            title: 'Basic 2020-10-11 At 14:02 By Luke Wallis',
-            payload: 'DemoReportBasic',
-          },
-          {
-            content_type: 'text',
-            title: 'Go Back',
-            payload: 'ReportMenu',
-          },
-        ],
+        pattern: 'DemoReport',
+        type: 'string',
+        handler: async (_AccountReportOption, _AccountReport, bot) => {
+          await bot.say(
+            'Please visit https://duckduckgroup.github.io/reports/AccountBreach.pdf to view the report',
+          );
+        },
       },
-      [
+      {
+        pattern: 'ReportMenu',
+        type: 'string',
+        handler: async (_AccountReportOption, _AccountReport, bot) => {
+          await bot.beginDialog('ArchiveMenu');
+        },
+      },
+      {
+        default: true,
+        handler: async (_, FailedValidation, bot) => {
+          await bot.say('Please select one of the presented options');
+          return FailedValidation.repeat();
+        },
+      },
+    ],
+    null,
+  );
+  AccountReport.addGotoDialog('ArchiveMenu');
+  controller.addDialog(AccountReport);
+
+  const ScanReport = new BotkitConversation('ScanReport', controller);
+  ScanReport.ask(
+    {
+      text: ['Please select which reports you would like to view:'],
+      quick_replies: [
         {
-          pattern: 'DemoReportAdvanced',
-          type: 'string',
-          handler: async (_ScanReportOption, _ScanReport, bot) => {await bot.say('Please visit https://duckduckgroup.github.io/reports/EnumerationAdvanced.pdf to view the report');},
+          content_type: 'text',
+          title: 'Full 2020-10-11 At 14:34 By Luke Wallis',
+          payload: 'DemoReportAdvanced',
         },
         {
-          pattern: 'DemoReportBasic',
-          type: 'string',
-          handler: async (_ScanReportOption, _ScanReport, bot) => {await bot.say('Please visit https://duckduckgroup.github.io/reports/EnumerationBasic.pdf to view the report')},
+          content_type: 'text',
+          title: 'Basic 2020-10-11 At 14:02 By Luke Wallis',
+          payload: 'DemoReportBasic',
         },
         {
-          pattern: 'ReportMenu',
-          type: 'string',
-          handler: async (_ScanReportOption, _ScanReport, bot) => {await bot.beginDialog('ArchiveMenu');},
-        },
-        {
-          default: true,
-          handler: async (_, FailedValidation, bot) => {
-            await bot.say('Please select one of the presented options');
-            return FailedValidation.repeat();
-          },
+          content_type: 'text',
+          title: 'Go Back',
+          payload: 'ReportMenu',
         },
       ],
-      null,
-    );
-    ScanReport.addGotoDialog('ArchiveMenu');
-    controller.addDialog(ScanReport);
-
-    const VulnReport = new BotkitConversation('VulnReport', controller);
-    VulnReport.ask(
+    },
+    [
       {
-        text: ['Please select which reports you would like to view:'],
-        quick_replies: [
-          {
-            content_type: 'text',
-            title: '2020-10-11 At 10:23 By Luke Wallis',
-            payload: 'DemoReport',
-          },
-          {
-            content_type: 'text',
-            title: 'Go Back',
-            payload: 'ReportMenu',
-          },
-        ],
+        pattern: 'DemoReportAdvanced',
+        type: 'string',
+        handler: async (_ScanReportOption, _ScanReport, bot) => {
+          await bot.say(
+            'Please visit https://duckduckgroup.github.io/reports/EnumerationAdvanced.pdf to view the report',
+          );
+        },
       },
-      [
+      {
+        pattern: 'DemoReportBasic',
+        type: 'string',
+        handler: async (_ScanReportOption, _ScanReport, bot) => {
+          await bot.say(
+            'Please visit https://duckduckgroup.github.io/reports/EnumerationBasic.pdf to view the report',
+          );
+        },
+      },
+      {
+        pattern: 'ReportMenu',
+        type: 'string',
+        handler: async (_ScanReportOption, _ScanReport, bot) => {
+          await bot.beginDialog('ArchiveMenu');
+        },
+      },
+      {
+        default: true,
+        handler: async (_, FailedValidation, bot) => {
+          await bot.say('Please select one of the presented options');
+          return FailedValidation.repeat();
+        },
+      },
+    ],
+    null,
+  );
+  ScanReport.addGotoDialog('ArchiveMenu');
+  controller.addDialog(ScanReport);
+
+  const VulnReport = new BotkitConversation('VulnReport', controller);
+  VulnReport.ask(
+    {
+      text: ['Please select which reports you would like to view:'],
+      quick_replies: [
         {
-          pattern: 'DemoReport',
-          type: 'string',
-          handler: async (_VulnReportOption, _VulnReport, bot) => {await bot.say('Please visit https://duckduckgroup.github.io/reports/Vulnerability.pdf to view the report');},
+          content_type: 'text',
+          title: '2020-10-11 At 10:23 By Luke Wallis',
+          payload: 'DemoReport',
         },
         {
-          pattern: 'ReportMenu',
-          type: 'string',
-          handler: async (_VulnReportOption, _VulnReport, bot) => {await bot.beginDialog('ArchiveMenu');},
-        },
-        {
-          default: true,
-          handler: async (_, FailedValidation, bot) => {
-            await bot.say('Please select one of the presented options');
-            return FailedValidation.repeat();
-          },
+          content_type: 'text',
+          title: 'Go Back',
+          payload: 'ReportMenu',
         },
       ],
-      null,
-    );
-    VulnReport.addGotoDialog('ArchiveMenu');
-    controller.addDialog(VulnReport);
+    },
+    [
+      {
+        pattern: 'DemoReport',
+        type: 'string',
+        handler: async (_VulnReportOption, _VulnReport, bot) => {
+          await bot.say(
+            'Please visit https://duckduckgroup.github.io/reports/Vulnerability.pdf to view the report',
+          );
+        },
+      },
+      {
+        pattern: 'ReportMenu',
+        type: 'string',
+        handler: async (_VulnReportOption, _VulnReport, bot) => {
+          await bot.beginDialog('ArchiveMenu');
+        },
+      },
+      {
+        default: true,
+        handler: async (_, FailedValidation, bot) => {
+          await bot.say('Please select one of the presented options');
+          return FailedValidation.repeat();
+        },
+      },
+    ],
+    null,
+  );
+  VulnReport.addGotoDialog('ArchiveMenu');
+  controller.addDialog(VulnReport);
 
-    controller.hears(['archive','report','view','old','past'], 'message', async (bot, message) => {
-        await bot.beginDialog('ArchiveMenu', message);
-    });
+  controller.hears(
+    ['archive', 'report', 'view', 'old', 'past'],
+    'message',
+    async (bot, message) => {
+      await bot.beginDialog('ArchiveMenu', message);
+    },
+  );
 }
