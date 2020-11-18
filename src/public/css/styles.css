@@ -8,28 +8,17 @@ html {
   margin: 0;
   padding: 0;
   font-size: 18px;
-  background-color: #FFF;
-  font-family: "helvetica", sans-serif;
-}
-
-.wrapper {
-  position: relative;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-.wrapper:after {
-  content: "";
-  display: table;
-  clear: both;
+  background-color: #252525;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .box {
-  border: 2px solid #CCC;
+  border: 2px solid #ccc;
   padding: 1rem calc(1rem - 2px);
   margin-bottom: 1rem;
 }
 .box:after {
-  content: "";
+  content: '';
   display: table;
   clear: both;
 }
@@ -71,7 +60,7 @@ div.input label {
   border: 1px solid #999;
   border-radius: 6px;
   padding: 5px;
-  background: #F0F0F0;
+  background: #f0f0f0;
 }
 .addon input,
 .addon textarea {
@@ -91,7 +80,7 @@ div.input label {
   padding: 0.5rem;
 }
 .addon button:hover {
-  background: #FFF;
+  background: #fff;
   color: #a795ef;
 }
 
@@ -112,7 +101,7 @@ a.button {
   text-align: center;
   text-decoration: none;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-  background-color: #FFF;
+  background-color: #fff;
   transition: box-shadow 0.1s linear;
 }
 a.button:hover {
@@ -121,20 +110,14 @@ a.button:hover {
 
 /* chat client */
 #message_window {
-  background: #FFFFFF;
-  border-left: 1px solid #CCC;
-  border-right: 1px solid #CCC;
-  /*height: 500px;
-  width: 320px;*/
   height: 100%;
   width: 100%;
-  /*margin: 2rem auto;*/
   display: flex;
   flex-direction: column;
-  font-family: "helvetica", sans-serif;
+  margin: 0%;
 }
 #message_window .disconnected {
-  background: #FFFFCC;
+  background: #ffffcc;
   padding: 0.25rem;
 }
 #message_window.connected .disconnected {
@@ -147,27 +130,24 @@ a.button:hover {
   display: none;
 }
 #message_window.offline .offline {
-  background: #FF0000;
-  color: #FFF;
+  background: #ff0000;
+  color: #fff;
   padding: 0.25rem;
   display: block;
 }
 #message_window .powered_by {
   flex-shrink: 0;
   text-align: center;
-  border-bottom: 1px solid #CCC;
-  font-size: 14px;
+  font-size: 1.5em;
   padding: 0.25rem;
-  color: #666;
+  color: #e8e8e8;
+  position: fixed;
+  width: 100%;
+  background: url(../images/nav-bg.gif) #353535;
+  border-bottom: 4px solid #434343;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
 }
-#message_window .powered_by a {
-  text-decoration: none;
-  color: #666;
-}
-#message_window .powered_by img {
-  position: relative;
-  top: 2px;
-}
+
 #message_window section {
   flex-grow: 1;
   flex-direction: column-reverse;
@@ -179,23 +159,36 @@ a.button:hover {
   clear: both;
 }
 #message_window footer {
-  border-top: 1px solid #CCC;
   padding: 0.25rem;
+  color: #e8e8e8;
+
+  width: 100%;
+  background: url(../images/nav-bg.gif) #353535;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
 }
-#message_window footer input[type=text] {
+#message_window footer input[type='text'] {
   flex-grow: 1;
-  font-size: 1.25rem;
+  font-size: 1.2em;
   outline: none;
   border: none;
+  background-color: transparent;
+  border: 4px solid #434343;
+  color: #f0e7d5;
+  padding: 0.45rem;
 }
 #message_window footer button {
-  width: 50px;
+  font-size: 1.2em;
   background: none;
   border: 0;
   cursor: pointer;
-  color: blue;
+  color: #f0e7d5;
   font-weight: bold;
 }
+
+#message_window footer button:hover {
+  color: #93bd20;
+}
+
 #message_window form {
   display: flex;
   margin: 0;
@@ -205,9 +198,9 @@ a.button:hover {
   display: none;
 }
 #message_window .message {
-  font-size: 14px;
+  font-size: 1em;
   padding: 0.5rem;
-  background: #F0F0F0;
+  background: #f0f0f0;
   color: #333;
   border-radius: 5px;
   width: auto;
@@ -215,7 +208,7 @@ a.button:hover {
   max-width: 75%;
 }
 #message_window .file_attachment {
-  background: #F0F0F0;
+  background: #f0f0f0;
   color: #333;
   border-radius: 5px;
   display: inline-block;
@@ -247,7 +240,8 @@ a.button:hover {
 }
 #message_window .message.outgoing {
   float: right;
-  background: #a795ef;
+  background: linear-gradient(#93bd20, #659e10);
+  background-color: #93bd20;
   color: white;
 }
 #message_window #message_replies {
@@ -270,16 +264,16 @@ a.button:hover {
 #message_window #message_replies a {
   text-decoration: none;
   display: block;
-  border: 1px solid #a795ef;
-  color: #a795ef;
+  border: 1px solid #93bd20;
+  color: #93bd20;
   border-radius: 16px;
   padding: 0.25rem 1rem;
   font-size: 14px;
   cursor: pointer;
 }
 #message_window #message_replies a:hover {
-  background: #a795ef;
-  color: #FFF;
+  background: #93bd20;
+  color: #fff;
 }
 
 /* typing indicator CSS based on code by Joseph Fusco -> https://codepen.io/fusco/pen/XbpaYv */
@@ -320,7 +314,7 @@ a.button:hover {
   margin: auto;
 }
 #home:after {
-  content: "";
+  content: '';
   display: table;
   clear: both;
 }
@@ -341,5 +335,3 @@ a.button:hover {
 #welcome {
   margin-left: 440px;
 }
-
-/*# sourceMappingURL=styles.css.map */

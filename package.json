@@ -4,7 +4,7 @@
   "description": "DuckDuckGroup's Chatbot-fronted Security Suite",
   "main": "dist/main.js",
   "scripts": {
-    "start": "ts-node src/main.ts",
+    "start": "ts-node-dev --respawn src/main.ts",
     "start:jsdev": "pnpm run build:dev && node dist/main.js",
     "clean": "rimraf dist/",
     "copy": "copyfiles -u 1 \"src/public/**/*\" dist && copyfiles -u 1 \"src/sass/**/*\" dist",
@@ -36,6 +36,7 @@
     "botkit-plugin-cms": "^1.0.3",
     "dotenv": "8.2.0",
     "mongodb": "^3.6.2",
+    "ts-node-dev": "^1.0.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
