@@ -141,10 +141,7 @@ export default function VulnScanner(controller: Botkit) {
     ],
     { key: 'TargetIP' },
   );
-  VulnIPSelect.say('Results:');
-  VulnIPSelect.say('High Severity: 23');
-  VulnIPSelect.say('Medium Severity: 45');
-  VulnIPSelect.say('Low Severity: 87');
+  VulnIPSelect.say('Results:\n\nHigh Severity - 23\n\nMedium Severity - 45\n\nLow Severity - 87');
   VulnIPSelect.ask(
     {
       text: ['Would you like to save the report?'],
