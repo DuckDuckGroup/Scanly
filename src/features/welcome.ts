@@ -32,46 +32,69 @@ export default function welcome(controller: Botkit) {
   // Display main menu - will loop until a valid choice is chosen
   const MainMenu = new BotkitConversation('MainMenu', controller);
   MainMenu.ask(
-    'Welcome to the main menu!\n\n 1. Account Breach Detection\n 2. Network Enumeration\n 3. Network Vulnerability Scan\n4. View Archived Reports\n\nPlease enter a number:',    [
+    {
+      text: ['Welcome to the Main Menu!\n\nPlease select an option:'],
+      quick_replies: [
+        {
+          content_type: 'text',
+          title: 'Account Breach',
+          payload: 'AccountBreach',
+        },
+        {
+          content_type: 'text',
+          title: 'Network Enumeration',
+          payload: 'NetworkScan',
+        },
+        {
+          content_type: 'text',
+          title: 'Network Vulnerability',
+          payload: 'Vulnerability',
+        },
+        {
+          content_type: 'text',
+          title: 'View Reports',
+          payload: 'Reports',
+        },
+      ],
+    },
+    [
       {
-        // Account Breach Scanner
-        pattern: '1',
+        pattern: 'AccountBreach',
         type: 'string',
-        handler: async (_MenuOption, _MainMenu, bot) => {
+        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {
           await bot.beginDialog('AccBreachConvo');
         },
       },
       {
-        pattern: '2',
+        pattern: 'NetworkScan',
         type: 'string',
-        handler: async (_MenuOption, _MainMenu, bot) => {
+        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {
           await bot.beginDialog('NetScanConvo');
         },
       },
       {
-        // Vulnerability Scanner
-        pattern: '3',
+        pattern: 'Vulnerability',
         type: 'string',
-        handler: async (_MenuOption, _MainMenu, bot) => {
+        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {
           await bot.beginDialog('VulnScanConvo');
         },
       },
       {
-        pattern: '4',
+        pattern: 'Reports',
         type: 'string',
-        handler: async (_MenuOption, _MainMenu, bot) => {
+        handler: async (_ArchiveMenuOption, _ArchiveMenu, bot) => {
           await bot.beginDialog('ArchiveMenu');
         },
       },
       {
         default: true,
-        handler: async (_MenuOption, FailedValidation, bot) => {
-          await bot.say('Please enter a number between 1 and 4');
+        handler: async (_, FailedValidation, bot) => {
+          await bot.say('Please select one of the presented options');
           return FailedValidation.repeat();
         },
       },
     ],
-    { key: 'MenuOption' },
+    null,
   );
   controller.addDialog(MainMenu);
 
