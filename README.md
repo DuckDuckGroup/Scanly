@@ -1,5 +1,5 @@
 # Scanly
-Group project for Coventry University module 206CDE
+This is a pre-prototype group project for Coventry University module 206CDE
 
 ## <u>Contributing</u>
 1) Clone repo
@@ -13,3 +13,5 @@ Group project for Coventry University module 206CDE
 - To test js files after transpiling from ts, run pnpm run start:jsdev
 - To transpile for deployment, run pnpm run build:prod
 - To lint, run pnpm run lint -- to have it autofix some bits, run pnpm run lint:fix
+
+**Just to reiterate - this project is a pre-prototype, and is non-functional (all outputs and results are mocked up).**
